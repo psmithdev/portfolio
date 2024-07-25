@@ -53,20 +53,22 @@ jobs:
       - name: Install PostCSS
         run: npm install -g postcss postcss-cli
       - name: Install Node.js dependencies
-        run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
+        run: |
+          cd quickstart3
+          npm install
       - name: Build with Hugo
         env:
           HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
           HUGO_ENVIRONMENT: production
         run: |
-          cd quickstart3
+          cd quickstart3  # Navigate to your Hugo site directory
           hugo \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./quickstart3/public
+          path: ./quickstart3/public # Specify the correct path to the public directory
 
   # Deployment job
   deploy:
